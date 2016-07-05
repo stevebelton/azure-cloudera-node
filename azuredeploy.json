@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-   
+
     "virtualMachinePrefix": {
       "type": "string"
     },
@@ -32,7 +32,10 @@
         "description": "The name of the virtual network provisioned for the deployment"
       }
     },
-    
+    "virtualNetworkResourceGroup": {
+      "type": "string"
+    },
+
     "networkInterfacePrefix": {
       "type": "string"
     },
@@ -48,15 +51,15 @@
     "storageAccountType": {
       "type": "string"
     },
-   "subnetName": {
+    "subnetName": {
       "type": "string"
     }
-   
+
   },
   "variables": {
-   "vnetID": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "subnet1Ref": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
-    
+
     "virtualMachineName": "[concat(parameters('virtualMachinePrefix'),parameters('virtualMachineIndex'))]",
     "storageAccountName": "[concat(parameters('storageAccountPrefix'),parameters('virtualMachineIndex'))]",
     "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'),parameters('virtualMachineIndex'))]"
