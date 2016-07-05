@@ -152,7 +152,7 @@
           }
         ],
         "networkSecurityGroup": {
-          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+          "id": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
         }
       },
       "dependsOn": [
