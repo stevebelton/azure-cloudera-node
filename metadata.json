@@ -1,0 +1,13 @@
+{
+
+  "itemDisplayName": "Cloudera Data Node Template",
+
+  "description": "This template deploys a single CentOs data node.",
+
+  "summary": "This template deploys a single CentOs data node for Cloudera",
+
+  "githubUsername": "caukgit"
+
+  "dateUpdated": "2016-05-07"
+
+}
