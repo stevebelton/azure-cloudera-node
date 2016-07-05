@@ -2,39 +2,27 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "nodePrefix": { "value": "dn" },
+    "nodeIndex": { "value": "0" },
+    "adminUsername": { "value": "azureuser" },
+    "adminPassword": { "value": null },
+    "nodeIPAddress": { "value": "10.0.0.1" },
+    "virtualNetworkRGName": { "value": "" },
     
-    "virtualMachinePrefix": {
-      "value": ""
+    "parameters": {
+    "storageType": {
+      "type": "string",
+      "defaultValue": "Premium_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
     },
-    "virtualMachineSize": {
-      "value": "Standard_DS14"
-    },
-    "adminUsername": {
-      "value": "azureuser"
-    },
-    "storageAccountPrefix": {
-      "value": ""
-    },
-   
-    "networkInterfacePrefix": {
-      "value": ""
-    },
-    "privateIPAddress": {
-      "value": "10.0.0.1"
-    },
-    "networkSecurityGroupName": {
-      "value": ""
-    },
-    "adminPassword": {
-      "value": null
-    },
-    "storageAccountType": {
-      "value": "Premium_LRS"
-    },
-    
-    "subnetName": {
-      "value": "default"
-    }
+    "networkName": { "value": "vnet" },
+    "subnetName": { "value": "default" }
 
   }
 }

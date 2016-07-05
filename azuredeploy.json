@@ -2,10 +2,31 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-
-    "virtualMachinePrefix": {
+    "storageType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "nodePrefix": {
       "type": "string"
     },
+    "nodeIndex": {
+      "type": "string"
+    },
+    "nodeIPAddress": {
+      "type": "string"
+    },
+    "virtualNetworkRGName": {
+      "type": "string"
+    },
+    "networkName": { "type": "string" },
+    "subnetName": { "type": "string" },
     "virtualMachineSize": {
       "type": "string",
       "defaultValue": "Standard_DS14",
@@ -17,155 +38,112 @@
         "description": "Size of the VM"
       }
     },
-    "virtualMachineIndex": {
-      "type": "string"
-    },
     "adminUsername": {
-      "type": "string"
-    },
-    "storageAccountPrefix": {
-      "type": "string"
-    },
-    "virtualNetworkName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the virtual network provisioned for the deployment"
-      }
-    },
-    "virtualNetworkResourceGroup": {
-      "type": "string"
-    },
-
-    "networkInterfacePrefix": {
-      "type": "string"
-    },
-    "privateIPAddress": {
-      "type": "string"
-    },
-    "networkSecurityGroupName": {
       "type": "string"
     },
     "adminPassword": {
       "type": "securestring"
-    },
-    "storageAccountType": {
-      "type": "string"
-    },
-    "subnetName": {
-      "type": "string"
     }
-
   },
   "variables": {
-    "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
+    "apiVersion": "2015-06-15",
+    "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeIndex'))]",
+    "storageName": "[concat(parameters('nodePrefix'),'sa', parameters('nodeIndex'))]",
 
-    "virtualMachineName": "[concat(parameters('virtualMachinePrefix'),parameters('virtualMachineIndex'))]",
-    "storageAccountName": "[concat(parameters('storageAccountPrefix'),parameters('virtualMachineIndex'))]",
-    "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'),parameters('virtualMachineIndex'))]"
+    "vmNetworkSettings": {
+      "vnetId": "[resourceId(parameters('virtualNetworkRGName'),concat('Microsoft.Network','/','virtualNetworks'),parameters('networkName'))]",
+      "nicName": "[concat(parameters('nodePrefix'), 'ni', parameters('nodeIndex'))]",
+      "virtualNetworkName": "[parameters('networkName')]",
+      "privateIPAddress": "[parameters('nodeIPAddress')]",
+      "virtualNetworkSubnetName": "[parameters('subnetName')]"
+    }
   },
   "resources": [
     {
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[variables('virtualMachineName')]",
-      "apiVersion": "2015-06-15",
+      "name": "[variables('storageName')]",
+      "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
-      "plan": {
-        "name": "cloudera-centos-6",
-        "publisher": "cloudera",
-        "product": "cloudera-centos-6"
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "[variables('storageName')]"
       },
       "properties": {
-        "osProfile": {
-          "computerName": "[variables('virtualMachineName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
+        "accountType": "[parameters('storageType')]"
+      }
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('vmNetworkSettings').nicName]",
+      "location": "[resourceGroup().location]",
+
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', variables('vmNetworkSettings').virtualNetworkName)]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[variables('vmNetworkSettings').privateIPAddress]",
+
+              "subnet": {
+                "id": "[concat(variables('vmNetworkSettings').vnetId, '/subnets/', variables('vmNetworkSettings').virtualNetworkSubnetName)]"
+              }
+            }
+          }
+        ]
+      }
+
+    },
+
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('nodeName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('vmNetworkSettings').nicName)]"
+
+      ],
+
+      "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('virtualMachineSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('nodeName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
             "publisher": "cloudera",
             "offer": "cloudera-centos-6",
-            "sku": "cloudera-centos-6",
+            "sku": "CLOUDERA-CENTOS-6",
             "version": "latest"
           },
           "osDisk": {
-            "name": "[variables('virtualMachineName')]",
+            "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds/', variables('virtualMachineName'), '.vhd')]"
+              "uri": "[concat('http://', variables('storageName'), '.blob.core.windows.net/vhds/', variables('nodeName'), '-osdisk.vhd')]"
             },
-            "createOption": "fromImage"
-          },
-          "dataDisks": [
-            {
-              "name": "datadisk0",
-              "diskSizeGB": "1023",
-              "lun": 0,
-              "vhd": {
-                "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds0/', variables('virtualMachineName'), '-datadisk0.vhd')]"
-              },
-              "createOption": "Empty"
-            }
-          ]
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNetworkSettings').nicName))]"
             }
           ]
         }
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "accountType": "[parameters('storageAccountType')]"
       }
-    },
-    {
-      "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('networkInterfaceName')]",
-      "apiVersion": "2015-05-01-preview",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "primary": true,
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "subnet": {
-                "id": "[variables('subnet1Ref')]"
-              },
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('privateIPAddress')]"
-            }
-          }
-        ],
-        "networkSecurityGroup": {
-          "id": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-        }
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
-      ]
     }
-    
-    
-  ],
-  "outputs": {
-    "adminUsername": {
-      "type": "string",
-      "value": "[parameters('adminUsername')]"
-    }
-  }
+  ]
 }
