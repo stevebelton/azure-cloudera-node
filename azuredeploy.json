@@ -4,7 +4,7 @@
   "parameters": {
    
     "virtualMachinePrefix": {
-      "type": "String"
+      "type": "string"
     },
     "virtualMachineSize": {
       "type": "string",
@@ -18,39 +18,43 @@
       }
     },
     "virtualMachineIndex": {
-      "type": "String"
+      "type": "string"
     },
     "adminUsername": {
-      "type": "String"
+      "type": "string"
     },
     "storageAccountPrefix": {
-      "type": "String"
+      "type": "string"
     },
     "virtualNetworkName": {
-      "type": "String"
+      "type": "string",
+      "metadata": {
+        "description": "The name of the virtual network provisioned for the deployment"
+      }
     },
+    
     "networkInterfacePrefix": {
-      "type": "String"
+      "type": "string"
     },
     "privateIPAddress": {
-      "type": "String"
+      "type": "string"
     },
     "networkSecurityGroupName": {
-      "type": "String"
+      "type": "string"
     },
     "adminPassword": {
-      "type": "SecureString"
+      "type": "securestring"
     },
     "storageAccountType": {
-      "type": "String"
+      "type": "string"
     },
    "subnetName": {
-      "type": "String"
+      "type": "string"
     }
    
   },
   "variables": {
-    "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "vnetId": "[resourceId(resourceGroup(),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "subnet1Ref": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
     "virtualMachineName": "[concat(parameters('virtualMachinePrefix'),parameters('virtualMachineIndex'))]",
     "storageAccountName": "[concat(parameters('storageAccountPrefix'),parameters('virtualMachineIndex'))]",
@@ -157,7 +161,7 @@
   ],
   "outputs": {
     "adminUsername": {
-      "type": "String",
+      "type": "string",
       "value": "[parameters('adminUsername')]"
     }
   }
