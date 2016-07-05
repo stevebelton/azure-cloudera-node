@@ -4,7 +4,7 @@
   "parameters": {
     "storageType": {
       "type": "string",
-      "defaultValue": "Standard_LRS",
+      "defaultValue": "Premium_LRS",
       "allowedValues": [
         "Standard_LRS",
         "Standard_ZRS",
@@ -48,7 +48,7 @@
   "variables": {
     "apiVersion": "2015-06-15",
     "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeIndex'))]",
-    "storageName": "[concat(parameters('nodePrefix'),'sa', parameters('nodeIndex'))]",
+    "storageAccountName": "[concat(parameters('nodePrefix'),'sa', parameters('nodeIndex'))]",
 
     "vmNetworkSettings": {
       "vnetId": "[resourceId(parameters('virtualNetworkRGName'),concat('Microsoft.Network','/','virtualNetworks'),parameters('networkName'))]",
@@ -60,13 +60,13 @@
   },
   "resources": [
     {
-      "name": "[variables('storageName')]",
+      "name": "[variables('storageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
       "dependsOn": [ ],
       "tags": {
-        "displayName": "[variables('storageName')]"
+        "displayName": "[variables('storageAccountName')]"
       },
       "properties": {
         "accountType": "[parameters('storageType')]"
@@ -107,7 +107,7 @@
         "product": "cloudera-centos-6"
       },
       "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', variables('storageName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('vmNetworkSettings').nicName)]"
 
       ],
@@ -131,11 +131,32 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', variables('storageName'), '.blob.core.windows.net/vhds/', variables('nodeName'), '-osdisk.vhd')]"
+              "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds/', variables('nodeName'), '-osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
-          }
+          },
+          "dataDisks": [
+            {
+              "name": "datadisk0",
+              "diskSizeGB": "1023",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds0/', variables('nodeName'), '-datadisk0.vhd')]"
+              },
+              "createOption": "Empty"
+            },
+            {
+              "name": "datadisk1",
+              "diskSizeGB": "1023",
+              "lun": 1,
+              "vhd": {
+                "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds1/', variables('nodeName'), '-datadisk1.vhd')]"
+              },
+              "createOption": "Empty"
+            }
+          ]
+
         },
         "networkProfile": {
           "networkInterfaces": [
