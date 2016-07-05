@@ -2,14 +2,20 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "location": {
-      "type": "String"
-    },
+   
     "virtualMachinePrefix": {
       "type": "String"
     },
     "virtualMachineSize": {
-      "type": "String"
+      "type": "string",
+      "defaultValue": "Standard_DS14",
+      "allowedValues": [
+        "Standard_DS13",
+        "Standard_DS14"
+      ],
+      "metadata": {
+        "description": "Size of the VM"
+      }
     },
     "virtualMachineIndex": {
       "type": "String"
@@ -45,7 +51,7 @@
   },
   "variables": {
     "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+    "subnet1Ref": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
     "virtualMachineName": "[concat(parameters('virtualMachinePrefix'),parameters('virtualMachineIndex'))]",
     "storageAccountName": "[concat(parameters('storageAccountPrefix'),parameters('virtualMachineIndex'))]",
     "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'),parameters('virtualMachineIndex'))]"
@@ -55,7 +61,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('virtualMachineName')]",
       "apiVersion": "2015-06-15",
-      "location": "[parameters('location')]",
+      "location": "[resourceGroup().location]",
       "plan": {
         "name": "cloudera-centos-6",
         "publisher": "cloudera",
@@ -113,7 +119,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('storageAccountName')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
+      "location": "[resourceGroup().location]",
       "properties": {
         "accountType": "[parameters('storageAccountType')]"
       }
@@ -122,7 +128,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('networkInterfaceName')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
+      "location": "[resourceGroup().location]",
       "properties": {
         "primary": true,
         "ipConfigurations": [
@@ -130,7 +136,7 @@
             "name": "ipconfig1",
             "properties": {
               "subnet": {
-                "id": "[variables('subnetRef')]"
+                "id": "[variables('subnet1Ref')]"
               },
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('privateIPAddress')]"
