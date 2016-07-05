@@ -78,10 +78,6 @@
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('vmNetworkSettings').nicName]",
       "location": "[resourceGroup().location]",
-
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', variables('vmNetworkSettings').virtualNetworkName)]"
-      ],
       "properties": {
         "ipConfigurations": [
           {
