@@ -13,6 +13,11 @@
         "Premium_LRS"
       ]
     },
+    "numDataDisks": {
+      "type": "int",
+      "defaultValue": 1 , 
+      "maxValue": 10
+    },
     "nodePrefix": {
       "type": "string"
     },
@@ -47,8 +52,12 @@
   },
   "variables": {
     "apiVersion": "2015-06-15",
-    "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeIndex'))]",
+    
     "storageAccountName": "[concat(parameters('nodePrefix'),'sa', parameters('nodeIndex'))]",
+
+    "vmSettings": {
+      "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeIndex'))]"
+    }, 
 
     "vmNetworkSettings": {
       "vnetId": "[resourceId(parameters('virtualNetworkRGName'),concat('Microsoft.Network','/','virtualNetworks'),parameters('networkName'))]",
@@ -56,7 +65,108 @@
       "virtualNetworkName": "[parameters('networkName')]",
       "privateIPAddress": "[parameters('nodeIPAddress')]",
       "virtualNetworkSubnetName": "[parameters('subnetName')]"
-    }
+    },
+    "diskArray": [
+      {
+        "name": "datadisk0",
+        "diskSizeGB": "1023",
+        "lun": 0,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds0/', variables('vmSettings').nodeName, '-datadisk0.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk1",
+        "diskSizeGB": "1023",
+        "lun": 1,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds1/', variables('vmSettings').nodeName, '-datadisk1.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+"name": "datadisk2",
+"diskSizeGB": "1023",
+"lun": 2,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds2/', variables('vmSettings').nodeName, '-datadisk2.vhd')]"
+        },
+"createOption": "Empty"
+},
+{
+"name": "datadisk3",
+"diskSizeGB": "1023",
+"lun": 3,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds3/', variables('vmSettings').nodeName, '-datadisk3.vhd')]"
+  },
+"createOption": "Empty"
+},
+{
+"name": "datadisk4",
+"diskSizeGB": "1023",
+"lun": 4,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds4/', variables('vmSettings').nodeName, '-datadisk4.vhd')]"
+  },
+"createOption": "Empty"
+},
+{
+"name": "datadisk5",
+"diskSizeGB": "1023",
+"lun": 5,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds5/', variables('vmSettings').nodeName, '-datadisk5.vhd')]"
+  },
+"createOption": "Empty"
+},
+{
+"name": "datadisk6",
+"diskSizeGB": "1023",
+"lun": 6,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds6/', variables('vmSettings').nodeName, '-datadisk6.vhd')]"
+  },
+"createOption": "Empty"
+},
+{
+"name": "datadisk7",
+"diskSizeGB": "1023",
+"lun": 7,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds7/', variables('vmSettings').nodeName, '-datadisk7.vhd')]"
+  },
+"createOption": "Empty"
+},
+{
+"name": "datadisk8",
+"diskSizeGB": "1023",
+"lun": 8,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds8/', variables('vmSettings').nodeName, '-datadisk8.vhd')]"
+  },
+"createOption": "Empty"
+},
+{
+"name": "datadisk9",
+"diskSizeGB": "1023",
+"lun": 9,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds9/', variables('vmSettings').nodeName, '-datadisk9.vhd')]"
+  },
+"createOption": "Empty"
+},
+{
+"name": "datadisk10",
+"diskSizeGB": "1023",
+"lun": 10,
+  "vhd": {
+    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds10/', variables('vmSettings').nodeName, '-datadisk10.vhd')]"
+  },
+"createOption": "Empty"
+}
+]
   },
   "resources": [
     {
@@ -136,26 +246,7 @@
             "caching": "ReadWrite",
             "createOption": "FromImage"
           },
-          "dataDisks": [
-            {
-              "name": "datadisk0",
-              "diskSizeGB": "1023",
-              "lun": 0,
-              "vhd": {
-                "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds0/', variables('nodeName'), '-datadisk0.vhd')]"
-              },
-              "createOption": "Empty"
-            },
-            {
-              "name": "datadisk1",
-              "diskSizeGB": "1023",
-              "lun": 1,
-              "vhd": {
-                "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds1/', variables('nodeName'), '-datadisk1.vhd')]"
-              },
-              "createOption": "Empty"
-            }
-          ]
+          "dataDisks": "[take(variables('diskArray'),parameters('numDataDisks'))]"
 
         },
         "networkProfile": {
@@ -169,3 +260,4 @@
     }
   ]
 }
+

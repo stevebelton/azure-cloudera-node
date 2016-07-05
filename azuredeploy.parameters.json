@@ -21,6 +21,7 @@
         "Premium_LRS"
       ]
     },
+    "numDataDisks": { "value": 1 },
     "networkName": { "value": "vnet" },
     "subnetName": { "value": "default" }
 
