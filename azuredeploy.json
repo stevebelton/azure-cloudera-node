@@ -15,8 +15,8 @@
     },
     "numDataDisks": {
       "type": "int",
-      "defaultValue": 1,
-      "maxValue": 10
+      "defaultValue": 0,
+      "maxValue": 12
     },
     "nodePrefix": {
       "type": "string"
@@ -43,7 +43,7 @@
     "subnetName": { "type": "string" },
     "virtualMachineSize": {
       "type": "string",
-      "defaultValue": "Standard_DS14",
+      "defaultValue": "Standard_DS13",
       "allowedValues": [
         "Standard_DS13",
         "Standard_DS14"
