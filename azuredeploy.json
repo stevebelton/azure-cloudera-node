@@ -49,10 +49,7 @@
     "adminPassword": {
       "type": "securestring"
     },
-    "scriptsUri": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/Cox-Automotive-UK/azure-cloudera-production/master"
-    },
+   
     "masterNodeIPStart": {
       "type": "string"
     },
@@ -65,18 +62,18 @@
     },
     "dataNodeCount ": {
       "type": "int",
-      "defaultValue" : 5
+      "defaultValue": 5
     }
-       
+
   },
   "variables": {
     "apiVersion": "2015-06-15",
-    
+    "scriptsUri": "https://raw.githubusercontent.com/Cox-Automotive-UK/azure-cloudera-production/master",
     "storageAccountName": "[concat(parameters('nodePrefix'),'sa', parameters('nodeIndex'))]",
 
     "vmSettings": {
       "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeIndex'))]"
-    }, 
+    },
 
     "vmNetworkSettings": {
       "vnetId": "[resourceId(parameters('virtualNetworkRGName'),concat('Microsoft.Network','/','virtualNetworks'),parameters('networkName'))]",
@@ -105,87 +102,87 @@
         "createOption": "Empty"
       },
       {
-"name": "datadisk2",
-"diskSizeGB": "1023",
-"lun": 2,
+        "name": "datadisk2",
+        "diskSizeGB": "1023",
+        "lun": 2,
         "vhd": {
           "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds2/', variables('vmSettings').nodeName, '-datadisk2.vhd')]"
         },
-"createOption": "Empty"
-},
-{
-"name": "datadisk3",
-"diskSizeGB": "1023",
-"lun": 3,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds3/', variables('vmSettings').nodeName, '-datadisk3.vhd')]"
-  },
-"createOption": "Empty"
-},
-{
-"name": "datadisk4",
-"diskSizeGB": "1023",
-"lun": 4,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds4/', variables('vmSettings').nodeName, '-datadisk4.vhd')]"
-  },
-"createOption": "Empty"
-},
-{
-"name": "datadisk5",
-"diskSizeGB": "1023",
-"lun": 5,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds5/', variables('vmSettings').nodeName, '-datadisk5.vhd')]"
-  },
-"createOption": "Empty"
-},
-{
-"name": "datadisk6",
-"diskSizeGB": "1023",
-"lun": 6,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds6/', variables('vmSettings').nodeName, '-datadisk6.vhd')]"
-  },
-"createOption": "Empty"
-},
-{
-"name": "datadisk7",
-"diskSizeGB": "1023",
-"lun": 7,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds7/', variables('vmSettings').nodeName, '-datadisk7.vhd')]"
-  },
-"createOption": "Empty"
-},
-{
-"name": "datadisk8",
-"diskSizeGB": "1023",
-"lun": 8,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds8/', variables('vmSettings').nodeName, '-datadisk8.vhd')]"
-  },
-"createOption": "Empty"
-},
-{
-"name": "datadisk9",
-"diskSizeGB": "1023",
-"lun": 9,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds9/', variables('vmSettings').nodeName, '-datadisk9.vhd')]"
-  },
-"createOption": "Empty"
-},
-{
-"name": "datadisk10",
-"diskSizeGB": "1023",
-"lun": 10,
-  "vhd": {
-    "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds10/', variables('vmSettings').nodeName, '-datadisk10.vhd')]"
-  },
-"createOption": "Empty"
-}
-]
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk3",
+        "diskSizeGB": "1023",
+        "lun": 3,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds3/', variables('vmSettings').nodeName, '-datadisk3.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk4",
+        "diskSizeGB": "1023",
+        "lun": 4,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds4/', variables('vmSettings').nodeName, '-datadisk4.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk5",
+        "diskSizeGB": "1023",
+        "lun": 5,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds5/', variables('vmSettings').nodeName, '-datadisk5.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk6",
+        "diskSizeGB": "1023",
+        "lun": 6,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds6/', variables('vmSettings').nodeName, '-datadisk6.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk7",
+        "diskSizeGB": "1023",
+        "lun": 7,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds7/', variables('vmSettings').nodeName, '-datadisk7.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk8",
+        "diskSizeGB": "1023",
+        "lun": 8,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds8/', variables('vmSettings').nodeName, '-datadisk8.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk9",
+        "diskSizeGB": "1023",
+        "lun": 9,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds9/', variables('vmSettings').nodeName, '-datadisk9.vhd')]"
+        },
+        "createOption": "Empty"
+      },
+      {
+        "name": "datadisk10",
+        "diskSizeGB": "1023",
+        "lun": 10,
+        "vhd": {
+          "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds10/', variables('vmSettings').nodeName, '-datadisk10.vhd')]"
+        },
+        "createOption": "Empty"
+      }
+    ]
   },
   "resources": [
     {
@@ -292,12 +289,13 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "[concat(parameters('scriptsUri'), '/scripts/prepare-disks.sh')]",
-            "[concat(parameters('scriptsUri'), '/scripts/initialize-node.sh')]"
+            "[concat(variables('scriptsUri'), '/scripts/prepare-disks.sh')]",
+            "[concat(variables('scriptsUri'), '/scripts/initialize-node.sh')]"
           ],
           "commandToExecute": "[concat('sh initialize-node.sh \"', parameters('masterNodeIPStart'), '\" \"', parameters('dataNodeIPStart'), '\" \"', variables('vmSettings').nodeName, '\" \"', '.wibble.com', '\" ', parameters('masterNodeCount'), ' ', parameters('dataNodeCount '), ' \"', parameters('adminUserName'), '\" ', 'datanode', ' >> /home/$ADMINUSER/initialize-datanode.log 2>&1')]"
         }
       }
-	}
-      ]
     }
+  ]
+ }
+
