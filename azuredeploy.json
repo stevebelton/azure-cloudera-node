@@ -209,7 +209,7 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[variables('nodeName')]",
+      "name": "[variables('vmSettings').nodeName]",
       "location": "[resourceGroup().location]",
       "plan": {
         "name": "cloudera-centos-6",
@@ -227,7 +227,7 @@
           "vmSize": "[parameters('virtualMachineSize')]"
         },
         "osProfile": {
-          "computerName": "[variables('nodeName')]",
+          "computerName": "[variables('vmSettings').nodeName]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -241,7 +241,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds/', variables('nodeName'), '-osdisk.vhd')]"
+              "uri": "[concat('http://', variables('storageAccountName'), '.blob.core.windows.net/vhds/', variables('vmSettings').nodeName, '-osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
