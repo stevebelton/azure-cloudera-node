@@ -298,5 +298,6 @@
           "commandToExecute": "[concat('sh initialize-node.sh \"', parameters('masterNodeIPStart'), '\" \"', parameters('dataNodeIPStart'), '\" \"', variables('vmSettings').nodeName, '\" \"', '.wibble.com', '\" ', parameters('masterNodeCount'), ' ', parameters('dataNodeCount '), ' \"', parameters('adminUserName'), '\" ', 'datanode', ' >> /home/$ADMINUSER/initialize-datanode.log 2>&1')]"
         }
       }
+	}
       ]
     }
