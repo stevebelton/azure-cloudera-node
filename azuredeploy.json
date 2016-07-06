@@ -21,6 +21,15 @@
     "nodePrefix": {
       "type": "string"
     },
+    "nodeSuffix": {
+      "type": "string",
+      "defaultValue": "gw",
+      "allowedValues": [
+        "dn",
+        "gw",
+        "mn"
+      ]
+    },
     "nodeIndex": {
       "type": "string"
     },
@@ -49,7 +58,7 @@
     "adminPassword": {
       "type": "securestring"
     },
-   
+
     "masterNodeIPStart": {
       "type": "string"
     },
@@ -69,15 +78,15 @@
   "variables": {
     "apiVersion": "2015-06-15",
     "scriptsUri": "https://raw.githubusercontent.com/Cox-Automotive-UK/azure-cloudera-node/master",
-    "storageAccountName": "[concat(parameters('nodePrefix'),'sa', parameters('nodeIndex'))]",
+    "storageAccountName": "[concat(parameters('nodePrefix'),'sa',parameters('nodeSuffix'), parameters('nodeIndex'))]",
 
     "vmSettings": {
-      "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeIndex'))]"
+      "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeSuffix'), parameters('nodeIndex'))]"
     },
 
     "vmNetworkSettings": {
       "vnetId": "[resourceId(parameters('virtualNetworkRGName'),concat('Microsoft.Network','/','virtualNetworks'),parameters('networkName'))]",
-      "nicName": "[concat(parameters('nodePrefix'), 'ni', parameters('nodeIndex'))]",
+      "nicName": "[concat(parameters('nodePrefix'), 'ni', parameters('nodeSuffix'),parameters('nodeIndex'))]",
       "virtualNetworkName": "[parameters('networkName')]",
       "privateIPAddress": "[parameters('nodeIPAddress')]",
       "virtualNetworkSubnetName": "[parameters('subnetName')]"
