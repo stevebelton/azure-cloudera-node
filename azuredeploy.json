@@ -68,7 +68,7 @@
   },
   "variables": {
     "apiVersion": "2015-06-15",
-    "scriptsUri": "https://raw.githubusercontent.com/Cox-Automotive-UK/azure-cloudera-production/master",
+    "scriptsUri": "https://raw.githubusercontent.com/Cox-Automotive-UK/azure-cloudera-node/master",
     "storageAccountName": "[concat(parameters('nodePrefix'),'sa', parameters('nodeIndex'))]",
 
     "vmSettings": {
