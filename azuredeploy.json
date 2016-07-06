@@ -15,7 +15,7 @@
     },
     "numDataDisks": {
       "type": "int",
-      "defaultValue": 1 , 
+      "defaultValue": 1,
       "maxValue": 10
     },
     "nodePrefix": {
@@ -48,7 +48,26 @@
     },
     "adminPassword": {
       "type": "securestring"
+    },
+    "scriptsUri": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/Cox-Automotive-UK/azure-cloudera-production/master"
+    },
+    "masterNodeIPStart": {
+      "type": "string"
+    },
+    "masterNodeCount": {
+      "type": "int",
+      "defaultValue": 2
+    },
+    "dataNodeIPStart": {
+      "type": "string"
+    },
+    "dataNodeCount ": {
+      "type": "int",
+      "defaultValue" : 5
     }
+       
   },
   "variables": {
     "apiVersion": "2015-06-15",
@@ -257,6 +276,27 @@
           ]
         }
       }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmSettings').nodeName, '/preparedisks')]",
+      "apiVersion": "2015-06-15",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('vmSettings').nodeName)]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.4",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[concat(parameters('scriptsUri'), '/scripts/prepare-disks.sh')]",
+            "[concat(parameters('scriptsUri'), '/scripts/initialize-node.sh')]"
+          ],
+          "commandToExecute": "[concat('sh initialize-node.sh \"', parameters('masterNodeIPStart'), '\" \"', parameters('dataNodeIPStart'), '\" \"', variables('vmSettings').nodeName, '\" \"', '.wibble.com', '\" ', parameters('masterNodeCount'), ' ', parameters('dataNodeCount '), ' \"', parameters('adminUserName'), '\" ', 'datanode', ' >> /home/$ADMINUSER/initialize-datanode.log 2>&1')]"
+        }
+      }
+      ]
     }
-  ]
-}
