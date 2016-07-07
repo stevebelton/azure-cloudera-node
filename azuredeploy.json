@@ -79,6 +79,7 @@
     "apiVersion": "2015-06-15",
     "scriptsUri": "https://raw.githubusercontent.com/Cox-Automotive-UK/azure-cloudera-node/master",
     "storageAccountName": "[concat(parameters('nodePrefix'),'sa',parameters('nodeSuffix'), parameters('nodeIndex'))]",
+    "gatwewayNodeASName" : "concat(parameters('nodePrefix'),'as', parameters('nodeSuffix')]",
 
     "vmSettings": {
       "nodeName": "[concat(parameters('nodePrefix'),'vl', parameters('nodeSuffix'), parameters('nodeIndex'))]"
@@ -248,6 +249,9 @@
       ],
 
       "properties": {
+	"availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('gatwewayNodeASName')]"
+        },
         "hardwareProfile": {
           "vmSize": "[parameters('virtualMachineSize')]"
         },
