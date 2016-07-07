@@ -23,10 +23,10 @@
     },
     "nodeSuffix": {
       "type": "string",
-      "defaultValue": "gw",
+      "defaultValue": "gn",
       "allowedValues": [
         "dn",
-        "gw",
+        "gn",
         "mn"
       ]
     },
