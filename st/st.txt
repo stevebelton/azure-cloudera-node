@@ -1,0 +1,18 @@
+availability set
+nsg
+
+cawediasdn
+
+
+
+cawedi
+
+
+CoreNetwork-Sub6
+corevnet-sub6
+cloudera-trusted
+
+
+kR27U9Pc1234
+
+
