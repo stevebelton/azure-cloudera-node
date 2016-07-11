@@ -249,7 +249,7 @@
 
       "properties": {
 	"availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('gatwewayNodeASName')]"
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('gatwewayNodeASName'))]"
         },
         "hardwareProfile": {
           "vmSize": "[parameters('virtualMachineSize')]"
