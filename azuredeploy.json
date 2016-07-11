@@ -208,13 +208,6 @@
         "accountType": "[parameters('storageType')]"
       }
     },
-   {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[variables('gatwewayNodeASName')]",
-      "location": "[resourceGroup().location]",
-      "properties": {}
-    },
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
