@@ -16,3 +16,16 @@ cloudera-trusted
 kR27U9Pc1234
 
 
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.155.14.4 cawedivlmn0.westeurope.cloudapp.azure.com cawedivlmn0
+10.155.14.5 cawedivlmn1.westeurope.cloudapp.azure.com cawedivlmn1
+10.155.14.6 cawedivlmn2.westeurope.cloudapp.azure.com cawedivlmn2
+10.155.14.7 cawedivlmn3.westeurope.cloudapp.azure.com cawedivlmn3
+10.155.14.9 cawedivldn0.westeurope.cloudapp.azure.com cawedivldn0
+10.155.14.10 cawedivldn1.westeurope.cloudapp.azure.com cawedivldn1
+10.155.14.11 cawedivldn2.westeurope.cloudapp.azure.com cawedivldn2
+10.155.14.12 cawedivldn3.westeurope.cloudapp.azure.com cawedivldn3
+10.155.14.13 cawedivldn4.westeurope.cloudapp.azure.com cawedivldn4
+10.155.14.20 cawedivlgn0.westeurope.cloudapp.azure.com cawedivlgn0
+10.155.14.21 cawedivlgn0.westeurope.cloudapp.azure.com cawedivlgn1
